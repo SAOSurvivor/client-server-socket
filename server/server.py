@@ -31,12 +31,12 @@ def handle_request(client_socket):
 
 
 def main():
-    host = '127.0.0.1'
+    host = '0.0.0.0'
     port = 15000
 
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind((host, port))
-    server_socket.listen(10)
+    server_socket.listen(100)
 
     print(f"Server listening on {host}:{port}")
 

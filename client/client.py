@@ -1,5 +1,7 @@
 import socket
 import struct
+import time
+
 from log_message_pb2 import LogMessage
 import concurrent.futures
 
@@ -15,7 +17,7 @@ def send_log_message(log_level, logger, mac, message=""):
     payload = log_message.SerializeToString()
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock.connect(('127.0.0.1', 15000))
+        sock.connect(('0.0.0.0', 15000))
 
         sock.sendall(struct.pack('>L', len(payload)) + payload)
 
