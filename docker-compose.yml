@@ -1,0 +1,15 @@
+version: '3'
+services:
+  log-server:
+    build:
+      context: ./server
+    ports:
+      - "15000:15000"
+    container_name: log-server
+
+  log-client:
+    build:
+      context: ./client
+    depends_on:
+      - log-server
+    container_name: log-client
