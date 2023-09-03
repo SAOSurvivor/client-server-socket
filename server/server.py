@@ -1,9 +1,33 @@
 import socket
+import struct
 import threading
+
+from log_message_pb2 import LogMessage
 
 
 def handle_request(client_request):
-    pass
+    while True:
+        length_prefix = client_request.recv(4)
+        if not length_prefix:
+            break
+
+        message_length = struct.unpack('>L', length_prefix)[0]
+
+        message_data = client_request.recv(message_length)
+
+        if len(message_data) != message_length:
+            break
+
+        log_message = LogMessage()
+        log_message.ParseFromString(message_data)
+
+        print(f"Log Level: {log_message.log_level}")
+        print(f"Logger: {log_message.logger}")
+        print(f"MAC Address: {log_message.mac.hex()}")
+        if log_message.message:
+            print(f"Message: {log_message.message}")
+
+    client_request.close()
 
 
 def main():
