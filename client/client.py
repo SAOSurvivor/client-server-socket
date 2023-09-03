@@ -17,7 +17,7 @@ def send_log_message(log_level, logger, mac, message=""):
     payload = log_message.SerializeToString()
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock.connect(('0.0.0.0', 15000))
+        sock.connect(('log-server', 15000))
 
         sock.sendall(struct.pack('>L', len(payload)) + payload)
 
