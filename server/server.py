@@ -5,15 +5,15 @@ import threading
 from log_message_pb2 import LogMessage
 
 
-def handle_request(client_request):
+def handle_request(client_socket):
     while True:
-        length_prefix = client_request.recv(4)
+        length_prefix = client_socket.recv(4)
         if not length_prefix:
             break
 
         message_length = struct.unpack('>L', length_prefix)[0]
 
-        message_data = client_request.recv(message_length)
+        message_data = client_socket.recv(message_length)
 
         if len(message_data) != message_length:
             break
@@ -27,7 +27,7 @@ def handle_request(client_request):
         if log_message.message:
             print(f"Message: {log_message.message}")
 
-    client_request.close()
+    client_socket.close()
 
 
 def main():
@@ -41,9 +41,9 @@ def main():
     print(f"Server listening on {host}:{port}")
 
     while True:
-        client_request, _ = server_socket.accept()
+        client_socket, _ = server_socket.accept()
 
-        client_thread = threading.Thread(target=handle_request, args=(client_request,))
+        client_thread = threading.Thread(target=handle_request, args=(client_socket,))
         client_thread.start()
 
 
